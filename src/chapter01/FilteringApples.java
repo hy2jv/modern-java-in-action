@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 
 import static java.awt.Color.*;
 import static java.awt.Color.GREEN;
+import static java.util.stream.Collectors.toList;
 
 public class FilteringApples {
 
@@ -37,6 +38,18 @@ public class FilteringApples {
         List<Apple> redApples = filterApples(inventory, (Apple a) -> a.getWeight() < 80 || RED.equals(a.getColor()));
         System.out.println("filterApples(inventory, (Apple a) -> a.getWeight() < 80 || \"red\".equals(a.getColor()))");
         System.out.println(redApples);
+
+        // 1.4.1 예제
+        // 순차 처리 방식의 코드
+        List<Apple> heavyApple = inventory.stream() // 컬렉션을 스트림으로 변환
+                .filter((Apple a) -> a.getWeight() > 150) // 병렬 처리
+                .collect(toList()); // 리스트 복원
+
+        // 병렬 처리 방식의 코드
+        List<Apple> heavyApple2 = inventory.parallelStream()
+                .filter((Apple a) -> a.getWeight() > 150)
+                .collect(toList());
+
     }
 
     // 1.3.2 예제
@@ -83,6 +96,7 @@ public class FilteringApples {
         }
         return result;
     }
+
 }
 
 
