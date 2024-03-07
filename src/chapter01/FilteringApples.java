@@ -1,18 +1,20 @@
 package chapter01;
 
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
+
+import static java.awt.Color.*;
+import static java.awt.Color.GREEN;
 
 public class FilteringApples {
 
     public static void main(String... args) {
-        List<Apple> inventory = Arrays.asList(
-                new Apple(80, "green"),
-                new Apple(155, "green"),
-                new Apple(120, "red")
-        );
+        List<Apple> inventory = new ArrayList<>();
+        inventory.add(new Apple(GREEN, 100));
+        inventory.add(new Apple(RED, 200));
 
         /* 메서드 호출 */
         List<Apple> greenApples = filterApples(inventory, FilteringApples::isGreenApple);
@@ -24,7 +26,7 @@ public class FilteringApples {
         System.out.println(heavyApples+"\n");
 
         /* 람다 함수 사용 */
-        List<Apple> greenApples2 = filterApples(inventory, (Apple a) -> "green".equals(a.getColor()));
+        List<Apple> greenApples2 = filterApples(inventory, (Apple a) -> GREEN.equals(a.getColor()));
         System.out.println("filterApples(inventory, (Apple a) -> \"green\".equals(a.getColor()))");
         System.out.println(greenApples2+"\n");
 
@@ -32,16 +34,17 @@ public class FilteringApples {
         System.out.println("filterApples(inventory, (Apple a) -> a.getWeight() > 150)");
         System.out.println(heavyApples2+"\n");
 
-        List<Apple> redApples = filterApples(inventory, (Apple a) -> a.getWeight() < 80 || "red".equals(a.getColor()));
+        List<Apple> redApples = filterApples(inventory, (Apple a) -> a.getWeight() < 80 || RED.equals(a.getColor()));
         System.out.println("filterApples(inventory, (Apple a) -> a.getWeight() < 80 || \"red\".equals(a.getColor()))");
         System.out.println(redApples);
     }
 
+    // 1.3.2 예제
     public static List<Apple> filterGreenApples(List<Apple> inventory) {
         /* 자바 8 이전 구현, 색상이 녹색인 사과 필터링 */
         List<Apple> result = new ArrayList<>();
         for (Apple apple : inventory) {
-            if ("green".equals(apple.getColor())) {
+            if (GREEN.equals(apple.getColor())) {
                 result.add(apple);
             }
         }
@@ -50,7 +53,7 @@ public class FilteringApples {
 
     public static boolean isGreenApple(Apple apple) {
         /* 자바 8 이후 */
-        return "green".equals(apple.getColor());
+        return GREEN.equals(apple.getColor());
     }
 
     public static List<Apple> filterHeavyApples(List<Apple> inventory) {
@@ -79,41 +82,6 @@ public class FilteringApples {
             }
         }
         return result;
-    }
-
-
-    public static class Apple {
-
-        private int weight = 0;
-        private String color = "";
-
-        public Apple(int weight, String color) {
-            this.weight = weight;
-            this.color = color;
-        }
-
-        public int getWeight() {
-            return weight;
-        }
-
-        public void setWeight(int weight) {
-            this.weight = weight;
-        }
-
-        public String getColor() {
-            return color;
-        }
-
-        public void setColor(String color) {
-            this.color = color;
-        }
-
-        @SuppressWarnings("boxing")
-        @Override
-        public String toString() {
-            return String.format("Apple{color='%s', weight=%d}", color, weight);
-        }
-
     }
 }
 
